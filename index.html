@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secret 💖</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Comic Sans MS', cursive;
+            background: linear-gradient(135deg, #ff4d6d, #ff99ac);
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            margin-top: 30px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px white; }
+            to { text-shadow: 0 0 25px pink; }
+        }
+
+        img {
+            width: 200px;
+            border-radius: 25px;
+            border: 6px solid white;
+            box-shadow: 0 0 25px pink;
+        }
+
+        .keypad {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px white;
+        }
+
+        input {
+            width: 200px;
+            height: 40px;
+            font-size: 22px;
+            text-align: center;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 65px;
+            height: 65px;
+            margin: 5px;
+            font-size: 20px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background: #ffe6eb;
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            color: pink;
+            font-size: 20px;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Enter Password 💕</h1>
+
+<img src="https://via.placeholder.com/200">
+
+<div class="keypad">
+    <br>
+    <input type="password" id="display" readonly><br>
+
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button><br>
+
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button><br>
+
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button><br>
+
+    <button onclick="clearDisplay()">C</button>
+    <button onclick="press('0')">0</button>
+    <button onclick="checkPassword()">OK</button>
+</div>
+
+<!-- MUSIC (replace with your file) -->
+<audio autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function press(num) {
+    document.getElementById("display").value += num;
+}
+
+function clearDisplay() {
+    document.getElementById("display").value = "";
+}
+
+function checkPassword() {
+    var password = document.getElementById("display").value;
+
+    if(password === "2004") {
+        window.location.href = "birthday.html";
+    } else {
+        alert("Wrong password LOSERR💔");
+    }
+}
+
+/* Floating hearts generator */
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (20 + Math.random() * 20) + "px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+
+}, 300);
+</script>
+
+</body>
+</html>
+

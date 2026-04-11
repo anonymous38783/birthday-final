@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>For You 💖</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #ff4d6d, #ff99ac);
+            font-family: 'Comic Sans MS', cursive;
+            overflow: hidden;
+            color: white;
+            text-align: center;
+        }
+
+        /* Envelope */
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #fff;
+            margin: 150px auto;
+            position: relative;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .flap {
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #ff4d6d;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transition: 0.8s;
+        }
+
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            background: white;
+            color: #ff4d6d;
+            top: 5%;
+            left: 5%;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+            transform: translateY(100%);
+            transition: 1s;
+            overflow: hidden;
+        }
+
+        .open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .open .letter {
+            transform: translateY(0);
+        }
+
+        /* 💕 NAME ANIMATION */
+        #name {
+            font-size: 28px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInName 2s ease forwards, heartbeat 1.5s infinite 2s;
+            color: #ff4d6d;
+            text-shadow: 0 0 15px pink;
+        }
+
+        @keyframes fadeInName {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        #message {
+            font-size: 18px;
+            white-space: pre-line;
+            margin-top: 10px;
+        }
+
+        /* Fireworks */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            to {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="envelope" onclick="openLetter(this)">
+    <div class="flap"></div>
+
+    <div class="letter">
+        <!-- 💖 CHANGE NAME HERE -->
+        <h2 id="name">For My Love, Jeffrey 💖</h2>
+
+        <div id="message"></div>
+    </div>
+</div>
+
+<script>
+function openLetter(el) {
+    el.classList.add("open");
+    setTimeout(startTyping, 2000);
+    startFireworks();
+}
+
+/* 💌 Romantic message */
+const text = `Happy Birthday my love 💖
+
+From the moment you came into my life,
+everything felt softer, warmer, and more beautiful ✨
+
+You are my happiness, my safe place,
+and my favorite person in this world 💕
+
+I hope today reminds you how deeply you are loved 💌
+
+I’m so lucky to have you… forever and always 💖`;
+
+let i = 0;
+
+function startTyping() {
+    function type() {
+        if (i < text.length) {
+            document.getElementById("message").innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, 40);
+        }
+    }
+    type();
+}
+
+/* 🎆 Fireworks */
+function startFireworks() {
+    setInterval(() => {
+        for (let i = 0; i < 20; i++) {
+            let f = document.createElement("div");
+            f.className = "firework";
+
+            let x = (Math.random() - 0.5) * 200 + "px";
+            let y = (Math.random() - 0.5) * 200 + "px";
+
+            f.style.left = Math.random() * window.innerWidth + "px";
+            f.style.top = Math.random() * window.innerHeight + "px";
+            f.style.setProperty('--x', x);
+            f.style.setProperty('--y', y);
+
+            document.body.appendChild(f);
+
+            setTimeout(() => f.remove(), 1000);
+        }
+    }, 800);
+}
+
+/* 💖 Floating hearts */
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random() * 20) + "px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+}, 300);
+</script>
+
+</body>
+</html>
