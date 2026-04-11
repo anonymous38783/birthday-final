@@ -6,13 +6,15 @@
 <style>
 body{
 margin:0;
+height:100vh;
 background:linear-gradient(135deg,#ff4d6d,#ff99ac);
 font-family:'Segoe UI',sans-serif;
 overflow:hidden;
 color:white;
-text-align:center;
+display:flex;
+justify-content:center;
+align-items:center;
 filter:sepia(.25) contrast(1.1) brightness(.95);
-background-attachment:fixed;
 }
 
 /* 🎞 film grain */
@@ -53,55 +55,76 @@ from{transform:translateY(100vh);}
 to{transform:translateY(-10vh);opacity:0;}
 }
 
+/* 🎬 MAIN LAYOUT */
+.main-scene{
+display:flex;
+align-items:center;
+gap:50px;
+}
+
 /* 🎁 gift */
 .gift-box{
-width:160px;height:160px;
-position:absolute;
-top:50%;left:50%;
-transform:translate(-50%,-50%);
+width:160px;
+height:160px;
 cursor:pointer;
+position:relative;
 animation:pulse 2s infinite;
 }
 @keyframes pulse{
-50%{transform:translate(-50%,-50%) scale(1.05);}
+50%{transform:scale(1.05);}
 }
-.box{width:100%;height:100%;background:#ff4d6d;border-radius:15px;}
+.box{
+width:100%;
+height:100%;
+background:#ff4d6d;
+border-radius:15px;
+}
 .lid{
-width:100%;height:50px;
+width:100%;
+height:50px;
 background:#ff1f4b;
-position:absolute;top:-50px;
+position:absolute;
+top:-50px;
 border-radius:15px;
 transition:.8s;
 }
-.opened .lid{transform:translateY(-140px) rotate(-25deg);}
+.opened .lid{
+transform:translateY(-140px) rotate(-25deg);
+}
 
 /* ✉️ envelope */
 .envelope{
-width:320px;height:220px;
+width:320px;
+height:220px;
 background:white;
 border-radius:12px;
-position:absolute;
-top:50%;left:50%;
-transform:translate(-50%,-50%) scale(.8);
+position:relative;
+transform:scale(.8);
 opacity:0;
 transition:1s ease;
 }
-.show-envelope{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.show-envelope{
+opacity:1;
+transform:scale(1);
+}
 
 .flap{
 border-left:160px solid transparent;
 border-right:160px solid transparent;
 border-bottom:110px solid #ff4d6d;
-position:absolute;top:0;
+position:absolute;
+top:0;
 transform-origin:top;
 transition:1s;
 }
 .letter{
 position:absolute;
-width:90%;height:90%;
+width:90%;
+height:90%;
 background:white;
 color:#ff4d6d;
-top:5%;left:5%;
+top:5%;
+left:5%;
 border-radius:10px;
 padding:20px;
 transform:translateY(100%);
@@ -111,34 +134,34 @@ overflow:hidden;
 .open .flap{transform:rotateX(180deg);}
 .open .letter{transform:translateY(0);}
 
-/* 💖 name */
-#name{animation:fadeIn 2s forwards 1s;}
+/* 💖 text */
+#name{
+opacity:0;
+animation:fadeIn 2s forwards 1s;
+}
 @keyframes fadeIn{to{opacity:1;}}
 
 /* 🎞 photostrip */
 .photostrip{
-position:absolute;
-right:30px;
-top:50%;
-transform:translateY(-50%) rotate(4deg);
 background:#111;
 padding:12px;
 border-radius:12px;
 box-shadow:0 10px 30px rgba(0,0,0,0.6);
+transform:rotate(4deg);
 }
 .photostrip img{
 width:120px;
 display:block;
 margin-bottom:12px;
 border:6px solid white;
-filter:contrast(1.1) brightness(0.95);
 }
 
 /* 🎆 fireworks */
 .firework{
 position:absolute;
 width:5px;height:5px;
-background:white;border-radius:50%;
+background:white;
+border-radius:50%;
 animation:explode 1s forwards;
 }
 @keyframes explode{
@@ -149,25 +172,33 @@ to{transform:translate(var(--x),var(--y));opacity:0;}
 
 <body>
 
-<div class="gift-box" onclick="openGift()">
-<div class="lid"></div>
-<div class="box"></div>
+<div class="main-scene">
+
+    <!-- 🎁 Gift -->
+    <div class="gift-box" onclick="openGift()">
+        <div class="lid"></div>
+        <div class="box"></div>
+    </div>
+
+    <!-- ✉️ Envelope -->
+    <div class="envelope">
+        <div class="flap"></div>
+        <div class="letter">
+            <h2 id="name">For My Jeppyy 💖</h2>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <!-- 🎞 Photos -->
+    <div class="photostrip">
+        <img src="jef1.jpeg">
+        <img src="jef2.jpeg">
+        <img src="jef3.jpeg">
+    </div>
+
 </div>
 
-<div class="envelope">
-<div class="flap"></div>
-<div class="letter">
-<h2 id="name">For My Love 💖</h2>
-<div id="message"></div>
-</div>
-</div>
-
-<div class="photostrip">
-<img src="jef1.jpeg">
-<img src="jef2.jpeg">
-<img src="jef3.jpeg">
-</div>
-
+<!-- 🎵 Music -->
 <audio id="bgMusic" loop>
 <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -205,7 +236,7 @@ type();
 /* 🎵 cinematic music */
 function cinematicMusic(a){
 a.volume=0;
-a.currentTime=12; // PERFECT sync point
+a.currentTime=12;
 a.play().catch(()=>{});
 
 let v=0;
@@ -224,7 +255,6 @@ let e=document.querySelector(".envelope");
 let m=document.getElementById("bgMusic");
 
 g.classList.add("opened");
-
 cinematicMusic(m);
 
 /* glow */
@@ -246,6 +276,7 @@ document.body.appendChild(f);
 setTimeout(()=>f.remove(),1000);
 }
 
+/* show envelope */
 setTimeout(()=>{
 g.style.display="none";
 e.classList.add("show-envelope");
