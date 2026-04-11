@@ -1,156 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Secret 💖</title>
+<title>For You 💖</title>
 
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Comic Sans MS', cursive;
-            background: linear-gradient(135deg, #ff4d6d, #ff99ac);
-            text-align: center;
-            color: white;
-        }
+<style>
+body {
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#ff4d6d,#ff99ac);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+}
 
-        h1 {
-            margin-top: 30px;
-            animation: glow 2s infinite alternate;
-        }
+.container{
+    background:rgba(255,255,255,0.1);
+    padding:30px;
+    border-radius:20px;
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 0 30px rgba(255,255,255,0.2);
+}
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px white; }
-            to { text-shadow: 0 0 25px pink; }
-        }
+.display{
+    font-size:28px;
+    letter-spacing:10px;
+    margin-bottom:20px;
+}
 
-        img {
-            width: 200px;
-            border-radius: 25px;
-            border: 6px solid white;
-            box-shadow: 0 0 25px pink;
-        }
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,70px);
+    gap:10px;
+}
 
-        .keypad {
-            margin-top: 20px;
-            display: inline-block;
-            padding: 20px;
-            border-radius: 25px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px white;
-        }
+.key{
+    background:white;
+    color:#ff4d6d;
+    padding:15px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:18px;
+    transition:.2s;
+}
 
-        input {
-            width: 200px;
-            height: 40px;
-            font-size: 22px;
-            text-align: center;
-            border-radius: 10px;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        button {
-            width: 65px;
-            height: 65px;
-            margin: 5px;
-            font-size: 20px;
-            border-radius: 20px;
-            border: none;
-            background: white;
-            color: #ff4d6d;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-            background: #ffe6eb;
-        }
-
-        /* Floating hearts */
-        .heart {
-            position: absolute;
-            color: pink;
-            font-size: 20px;
-            animation: floatUp 5s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh); opacity: 1; }
-            100% { transform: translateY(-10vh); opacity: 0; }
-        }
-    </style>
+.key:hover{transform:scale(1.1);background:#ffe6ea;}
+</style>
 </head>
 
 <body>
 
-<h1>Enter Password 💕</h1>
-
-<img src="https://via.placeholder.com/200">
+<div class="container">
+<h2>Enter the Secret 💌</h2>
+<div class="display" id="display">••••</div>
 
 <div class="keypad">
-    <br>
-    <input type="password" id="display" readonly><br>
-
-    <button onclick="press('1')">1</button>
-    <button onclick="press('2')">2</button>
-    <button onclick="press('3')">3</button><br>
-
-    <button onclick="press('4')">4</button>
-    <button onclick="press('5')">5</button>
-    <button onclick="press('6')">6</button><br>
-
-    <button onclick="press('7')">7</button>
-    <button onclick="press('8')">8</button>
-    <button onclick="press('9')">9</button><br>
-
-    <button onclick="clearDisplay()">C</button>
-    <button onclick="press('0')">0</button>
-    <button onclick="checkPassword()">OK</button>
+<div class="key" onclick="press('1')">1</div>
+<div class="key" onclick="press('2')">2</div>
+<div class="key" onclick="press('3')">3</div>
+<div class="key" onclick="press('4')">4</div>
+<div class="key" onclick="press('5')">5</div>
+<div class="key" onclick="press('6')">6</div>
+<div class="key" onclick="press('7')">7</div>
+<div class="key" onclick="press('8')">8</div>
+<div class="key" onclick="press('9')">9</div>
+<div class="key" onclick="clearPass()">⌫</div>
+<div class="key" onclick="press('0')">0</div>
+<div class="key" onclick="check()">✔</div>
+</div>
 </div>
 
-<!-- MUSIC (replace with your file) -->
-<audio autoplay loop>
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-function press(num) {
-    document.getElementById("display").value += num;
+let input="";
+const password="1234"; // change
+
+function press(n){
+ if(input.length<4){input+=n;update();}
 }
-
-function clearDisplay() {
-    document.getElementById("display").value = "";
+function clearPass(){
+ input=input.slice(0,-1);update();
 }
-
-function checkPassword() {
-    var password = document.getElementById("display").value;
-
-    if(password === "2004") {
-        window.location.href = "birthday.html";
-    } else {
-        alert("Wrong password LOSERR💔");
-    }
+function update(){
+ document.getElementById("display").innerText="•".repeat(input.length).padEnd(4,"•");
 }
-
-/* Floating hearts generator */
-setInterval(() => {
-    let heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (20 + Math.random() * 20) + "px";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 5000);
-
-}, 300);
+function check(){
+ if(input===password){
+  window.location.href="birthday.html";
+ }else{
+  alert("Wrong password 💔");
+  input="";update();
+ }
+}
 </script>
 
 </body>
 </html>
-
