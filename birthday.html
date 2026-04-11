@@ -181,85 +181,83 @@ to{transform:translate(var(--x),var(--y));opacity:0;}
 
 <script>
 
+
+
 /* 💌 MESSAGE */
-const text=`Happy Birthday my love 💖
+const text = `Happy Birthday my love 💖
 
-You are the most beautiful part of my life ✨
-Every moment with you means everything to me 💕
+You are my happiness, my peace, and my everything ✨
+Every moment with you means the world to me 💕
 
-No matter what happens,
-I will always choose you again and again 💌`;
+I will always choose you, again and again 💌`;
 
-let i=0;
+let i = 0;
 function startTyping(){
-let el=document.getElementById("message");
-el.innerHTML="";
-i=0;
-function type(){
-if(i<text.length){
-el.innerHTML+=text[i++];
-setTimeout(type,25);
-}}
-type();
+    let el = document.getElementById("message");
+    el.innerHTML = "";
+    i = 0;
+
+    function type(){
+        if(i < text.length){
+            el.innerHTML += text[i++];
+            setTimeout(type, 25);
+        }
+    }
+    type();
 }
 
-/* 🎵 FIXED MUSIC */
-let musicStarted=false;
+/* 🎵 ULTRA STABLE MUSIC */
+let started = false;
 
-function cinematicMusic(a){
+function cinematicMusic(){
+    if(started) return;
+    started = true;
 
-if(musicStarted) return; // prevents loop bug
-musicStarted=true;
+    const audio = document.getElementById("bgMusic");
 
-a.volume=0;
+    audio.pause();          // reset
+    audio.currentTime = 0;  // start from beginning
+    audio.volume = 0;
 
-a.play().then(()=>{
-let v=0;
-let fade=setInterval(()=>{
-if(v<1){
-v+=0.02;
-a.volume=v;
-}else clearInterval(fade);
-},250);
-}).catch(()=>{
-console.log("Play blocked");
-});
+    audio.play().then(() => {
+
+        let v = 0;
+        const fade = setInterval(() => {
+            if(v < 1){
+                v += 0.03;
+                audio.volume = v;
+            } else {
+                clearInterval(fade);
+            }
+        }, 200);
+
+    }).catch(() => {
+        alert("Tap again 💖 (browser needs interaction)");
+    });
 }
 
 /* 🎁 OPEN GIFT */
 function openGift(){
-let g=document.querySelector(".gift-box");
-let e=document.querySelector(".envelope");
-let m=document.getElementById("bgMusic");
 
-g.classList.add("opened");
+    const gift = document.querySelector(".gift-box");
+    const envelope = document.querySelector(".envelope");
 
-cinematicMusic(m);
+    gift.classList.add("opened");
 
-/* fireworks burst */
-for(let i=0;i<25;i++){
-let f=document.createElement("div");
-f.className="firework";
-f.style.left="50%";
-f.style.top="50%";
-f.style.setProperty('--x',(Math.random()-0.5)*250+"px");
-f.style.setProperty('--y',(Math.random()-0.5)*250+"px");
-document.body.appendChild(f);
-setTimeout(()=>f.remove(),1000);
+    cinematicMusic(); // ✅ safe call
+
+    setTimeout(() => {
+        gift.style.display = "none";
+        envelope.classList.add("show-envelope");
+
+        setTimeout(() => {
+            envelope.classList.add("open"); // ✅ correct
+            startTyping();
+        }, 600);
+
+    }, 700);
 }
 
-/* show envelope */
-setTimeout(()=>{
-g.style.display="none";
-e.classList.add("show-envelope");
-
-setTimeout(()=>{
-e.classList.add("open"); // ✅ correct element
-startTyping();
-},700);
-
-},800);
-}
 </script>
 
 </body>
