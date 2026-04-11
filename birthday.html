@@ -16,7 +16,6 @@ background:linear-gradient(135deg,#ff4d6d,#ff99ac);
 font-family:'Segoe UI',sans-serif;
 overflow:hidden;
 color:white;
-filter:sepia(.25) contrast(1.1) brightness(.95);
 padding:20px;
 }
 
@@ -89,7 +88,7 @@ width:90%;
 height:90%;
 top:5%;
 left:5%;
-background:linear-gradient(#fff,#fff5f7);
+background:#fff;
 color:#ff4d6d;
 border-radius:8px;
 padding:16px;
@@ -97,9 +96,11 @@ transform:translateY(100%);
 transition:1s;
 overflow:auto;
 font-size:14px;
+line-height:1.5;
 }
-.open .flap{transform:rotateX(180deg);}
-.open .letter{transform:translateY(0);}
+
+.envelope.open .flap{transform:rotateX(180deg);}
+.envelope.open .letter{transform:translateY(0);}
 
 /* photostrip */
 .photostrip{
@@ -149,11 +150,13 @@ to{transform:translate(var(--x),var(--y));opacity:0;}
 
 <div class="main-scene">
 
+<!-- 🎁 Gift -->
 <div class="gift-box" onclick="openGift()">
 <div class="lid"></div>
 <div class="box"></div>
 </div>
 
+<!-- ✉️ Envelope -->
 <div class="envelope">
 <div class="flap"></div>
 <div class="letter">
@@ -162,6 +165,7 @@ to{transform:translate(var(--x),var(--y));opacity:0;}
 </div>
 </div>
 
+<!-- 🎞 Photos -->
 <div class="photostrip">
 <img src="jef1.jpeg">
 <img src="jef2.jpeg">
@@ -170,21 +174,14 @@ to{transform:translate(var(--x),var(--y));opacity:0;}
 
 </div>
 
+<!-- 🎵 MUSIC -->
 <audio id="bgMusic" loop preload="auto">
 <source src="untilifoundu.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-/* particles */
-setInterval(()=>{
-let s=document.createElement("div");
-s.className="spark";
-s.style.left=Math.random()*100+"vw";
-document.body.appendChild(s);
-setTimeout(()=>s.remove(),6000);
-},200);
 
-/* message */
+/* 💌 MESSAGE */
 const text=`Happy Birthday my love 💖
 
 You are the most beautiful part of my life ✨
@@ -206,39 +203,40 @@ setTimeout(type,25);
 type();
 }
 
-/* 🎵 FIXED MUSIC (NO MORE 1-SEC BUG) */
+/* 🎵 FIXED MUSIC */
+let musicStarted=false;
+
 function cinematicMusic(a){
 
-a.volume = 0;
-a.play();
+if(musicStarted) return; // prevents loop bug
+musicStarted=true;
 
-a.addEventListener("canplaythrough", () => {
+a.volume=0;
 
-
-    let v = 0;
-    let fade = setInterval(()=>{
-        if(v < 1){
-            v += 0.02;
-            a.volume = v;
-        } else clearInterval(fade);
-    },250);
-
- }).catch(()=>{
-        console.log("Play blocked");
-    });
-
+a.play().then(()=>{
+let v=0;
+let fade=setInterval(()=>{
+if(v<1){
+v+=0.02;
+a.volume=v;
+}else clearInterval(fade);
+},250);
+}).catch(()=>{
+console.log("Play blocked");
+});
 }
 
-/* open gift */
+/* 🎁 OPEN GIFT */
 function openGift(){
 let g=document.querySelector(".gift-box");
 let e=document.querySelector(".envelope");
 let m=document.getElementById("bgMusic");
 
 g.classList.add("opened");
+
 cinematicMusic(m);
 
-/* burst */
+/* fireworks burst */
 for(let i=0;i<25;i++){
 let f=document.createElement("div");
 f.className="firework";
@@ -250,12 +248,13 @@ document.body.appendChild(f);
 setTimeout(()=>f.remove(),1000);
 }
 
+/* show envelope */
 setTimeout(()=>{
 g.style.display="none";
 e.classList.add("show-envelope");
 
 setTimeout(()=>{
-e.classList.add("open");
+e.classList.add("open"); // ✅ correct element
 startTyping();
 },700);
 
