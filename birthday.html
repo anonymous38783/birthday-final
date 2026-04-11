@@ -213,7 +213,7 @@ a.volume = 0;
 a.play();
 
 a.addEventListener("canplaythrough", () => {
-    a.currentTime = 8; // safer than 12
+
 
     let v = 0;
     let fade = setInterval(()=>{
@@ -223,7 +223,9 @@ a.addEventListener("canplaythrough", () => {
         } else clearInterval(fade);
     },250);
 
-}, { once:true });
+ }).catch(()=>{
+        console.log("Play blocked");
+    });
 
 }
 
