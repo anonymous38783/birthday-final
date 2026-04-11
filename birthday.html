@@ -67,13 +67,13 @@ transition:.8s;
 }
 .opened .lid{transform:translateY(-110px) rotate(-25deg);}
 
-/* ✉️ envelope */
+/* ✉️ envelope (BIGGER) */
 .envelope{
-width:300px;
-max-width:90vw;
-height:190px;
+width:380px;
+max-width:95vw;
+height:250px;
 background:#fff;
-border-radius:10px;
+border-radius:12px;
 position:relative;
 box-shadow:0 15px 40px rgba(0,0,0,0.3);
 overflow:hidden;
@@ -87,17 +87,17 @@ transition:1s;
 content:"";
 position:absolute;
 bottom:0;
-border-left:150px solid transparent;
-border-right:150px solid transparent;
-border-top:95px solid #ffe6ea;
+border-left:190px solid transparent;
+border-right:190px solid transparent;
+border-top:125px solid #ffe6ea;
 }
 
 .flap{
 position:absolute;
 top:0;
-border-left:150px solid transparent;
-border-right:150px solid transparent;
-border-bottom:95px solid #ff4d6d;
+border-left:190px solid transparent;
+border-right:190px solid transparent;
+border-bottom:125px solid #ff4d6d;
 transform-origin:top;
 transition:1s;
 z-index:2;
@@ -150,7 +150,6 @@ audio{display:none;}
 
 <body>
 
-<!-- 💖 HEARTS -->
 <div class="hearts" id="hearts"></div>
 
 <div class="main-scene">
@@ -197,7 +196,7 @@ h.style.animationDelay=(Math.random()*5)+"s";
 heartContainer.appendChild(h);
 }
 
-/* 💌 MESSAGE */
+/* 💌 MESSAGE (FIXED) */
 const text=`Happy Birthday my love 💖
 
 YOU'RE 17 NOW!!! how cool is that!!
@@ -238,25 +237,23 @@ when we started dating.
 Ik our relationship isnt perfect and tht
 its hard to deal with me but im so 
 happy you do it everyday baby.
-
-
-
 `;
 
 let i=0;
 function startTyping(){
 let el=document.getElementById("message");
-el.innerHTML="";
+el.textContent="";
 i=0;
 function type(){
 if(i<text.length){
-el.innerHTML+=text[i++];
+el.textContent+=text.charAt(i);
+i++;
 setTimeout(type,25);
 }}
 type();
 }
 
-/* 🎵 MUSIC (STABLE) */
+/* 🎵 MUSIC */
 let started=false;
 function cinematicMusic(){
 if(started) return;
@@ -271,8 +268,6 @@ let fade=setInterval(()=>{
 if(v<1){v+=0.02;audio.volume=v;}
 else clearInterval(fade);
 },200);
-}).catch(()=>{
-alert("Tap again 💖");
 });
 }
 
