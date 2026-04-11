@@ -1,206 +1,261 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>For You 💖</title>
+<title>For You 💖</title>
 
-    <style>
-        body {
-            margin: 0;
-            background: linear-gradient(135deg, #ff4d6d, #ff99ac);
-            font-family: 'Comic Sans MS', cursive;
-            overflow: hidden;
-            color: white;
-            text-align: center;
-        }
+<style>
+body{
+margin:0;
+background:linear-gradient(135deg,#ff4d6d,#ff99ac);
+font-family:'Segoe UI',sans-serif;
+overflow:hidden;
+color:white;
+text-align:center;
+filter:sepia(.25) contrast(1.1) brightness(.95);
+}
 
-        /* Envelope */
-        .envelope {
-            width: 300px;
-            height: 200px;
-            background: #fff;
-            margin: 150px auto;
-            position: relative;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+/* 🎞 film grain */
+.film-grain{
+position:fixed;
+width:100%;height:100%;
+pointer-events:none;
+opacity:.15;
+z-index:999;
+background:url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+animation:grain .3s infinite;
+}
+@keyframes grain{
+0%{transform:translate(0,0);}
+50%{transform:translate(2%,-2%);}
+100%{transform:translate(-2%,2%);}
+}
 
-        .flap {
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 100px solid #ff4d6d;
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform-origin: top;
-            transition: 0.8s;
-        }
+/* 🌑 vignette */
+.vignette{
+position:fixed;
+width:100%;height:100%;
+box-shadow:inset 0 0 150px rgba(0,0,0,.4);
+z-index:998;
+pointer-events:none;
+}
 
-        .letter {
-            position: absolute;
-            width: 90%;
-            height: 90%;
-            background: white;
-            color: #ff4d6d;
-            top: 5%;
-            left: 5%;
-            border-radius: 10px;
-            padding: 20px;
-            box-sizing: border-box;
-            transform: translateY(100%);
-            transition: 1s;
-            overflow: hidden;
-        }
+/* 🌟 particles */
+.spark{
+position:absolute;
+width:6px;height:6px;
+background:white;
+border-radius:50%;
+animation:float 6s linear infinite;
+}
+@keyframes float{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);opacity:0;}
+}
 
-        .open .flap {
-            transform: rotateX(180deg);
-        }
+/* 🎁 gift */
+.gift-box{
+width:160px;height:160px;
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+cursor:pointer;
+animation:pulse 2s infinite;
+}
+@keyframes pulse{
+50%{transform:translate(-50%,-50%) scale(1.05);}
+}
+.box{width:100%;height:100%;background:#ff4d6d;border-radius:15px;}
+.lid{
+width:100%;height:50px;
+background:#ff1f4b;
+position:absolute;top:-50px;
+border-radius:15px;
+transition:.8s;
+}
+.opened .lid{transform:translateY(-140px) rotate(-25deg);}
 
-        .open .letter {
-            transform: translateY(0);
-        }
+/* ✉️ envelope */
+.envelope{
+width:320px;height:220px;
+background:white;
+border-radius:12px;
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%) scale(.8);
+opacity:0;
+transition:1s;
+}
+.show-envelope{opacity:1;transform:translate(-50%,-50%) scale(1);}
 
-        /* 💕 NAME ANIMATION */
-        #name {
-            font-size: 28px;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: fadeInName 2s ease forwards, heartbeat 1.5s infinite 2s;
-            color: #ff4d6d;
-            text-shadow: 0 0 15px pink;
-        }
+.flap{
+border-left:160px solid transparent;
+border-right:160px solid transparent;
+border-bottom:110px solid #ff4d6d;
+position:absolute;top:0;
+transform-origin:top;
+transition:1s;
+}
+.letter{
+position:absolute;
+width:90%;height:90%;
+background:white;
+color:#ff4d6d;
+top:5%;left:5%;
+border-radius:10px;
+padding:20px;
+transform:translateY(100%);
+transition:1s;
+}
+.open .flap{transform:rotateX(180deg);}
+.open .letter{transform:translateY(0);}
 
-        @keyframes fadeInName {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* 💖 name */
+#name{animation:fadeIn 2s forwards 1s;}
+@keyframes fadeIn{to{opacity:1;}}
 
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+/* 🎞 photostrip */
+.photostrip{
+position:absolute;
+right:30px;top:50%;
+transform:translateY(-50%) rotate(3deg);
+background:#111;
+padding:10px;
+border-radius:10px;
+}
+.photostrip img{
+width:120px;
+display:block;
+margin-bottom:10px;
+border:5px solid white;
+}
 
-        #message {
-            font-size: 18px;
-            white-space: pre-line;
-            margin-top: 10px;
-        }
-
-        /* Fireworks */
-        .firework {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: white;
-            border-radius: 50%;
-            animation: explode 1s ease-out forwards;
-        }
-
-        @keyframes explode {
-            to {
-                transform: translate(var(--x), var(--y));
-                opacity: 0;
-            }
-        }
-
-        /* Floating hearts */
-        .heart {
-            position: absolute;
-            font-size: 20px;
-            animation: floatUp 5s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh); opacity: 1; }
-            100% { transform: translateY(-10vh); opacity: 0; }
-        }
-    </style>
+/* 🎆 fireworks */
+.firework{
+position:absolute;
+width:5px;height:5px;
+background:white;border-radius:50%;
+animation:explode 1s forwards;
+}
+@keyframes explode{
+to{transform:translate(var(--x),var(--y));opacity:0;}
+}
+</style>
 </head>
 
 <body>
 
-<div class="envelope" onclick="openLetter(this)">
-    <div class="flap"></div>
-
-    <div class="letter">
-        <!-- 💖 CHANGE NAME HERE -->
-        <h2 id="name">For My Love, Jeffrey 💖</h2>
-
-        <div id="message"></div>
-    </div>
+<div class="gift-box" onclick="openGift()">
+<div class="lid"></div>
+<div class="box"></div>
 </div>
 
+<div class="envelope">
+<div class="flap"></div>
+<div class="letter">
+<h2 id="name">For My Love 💖</h2>
+<div id="message"></div>
+</div>
+</div>
+
+<!-- 🎞 photos -->
+<div class="photostrip">
+<img src="photo1.jpg">
+<img src="photo2.jpg">
+<img src="photo3.jpg">
+</div>
+
+<!-- 🎵 music -->
+<audio id="bgMusic" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="vignette"></div>
+<div class="film-grain"></div>
+
 <script>
-function openLetter(el) {
-    el.classList.add("open");
-    setTimeout(startTyping, 2000);
-    startFireworks();
+/* particles */
+setInterval(()=>{
+let s=document.createElement("div");
+s.className="spark";
+s.style.left=Math.random()*100+"vw";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),6000);
+},200);
+
+/* message */
+const text=`Happy Birthday my love 💖
+You are my everything ✨`;
+
+let i=0;
+function startTyping(){
+let el=document.getElementById("message");
+function type(){
+if(i<text.length){
+el.innerHTML+=text[i++];
+setTimeout(type,30);
+}}
+type();
 }
 
-/* 💌 Romantic message */
-const text = `Happy Birthday my love 💖
-
-From the moment you came into my life,
-everything felt softer, warmer, and more beautiful ✨
-
-You are my happiness, my safe place,
-and my favorite person in this world 💕
-
-I hope today reminds you how deeply you are loved 💌
-
-I’m so lucky to have you… forever and always 💖`;
-
-let i = 0;
-
-function startTyping() {
-    function type() {
-        if (i < text.length) {
-            document.getElementById("message").innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, 40);
-        }
-    }
-    type();
+/* music fade */
+function fadeMusic(a){
+a.volume=0;a.play();
+let v=0;
+let f=setInterval(()=>{
+if(v<1){v+=0.05;a.volume=v;}
+else clearInterval(f);
+},200);
 }
 
-/* 🎆 Fireworks */
-function startFireworks() {
-    setInterval(() => {
-        for (let i = 0; i < 20; i++) {
-            let f = document.createElement("div");
-            f.className = "firework";
+/* open gift */
+function openGift(){
+let g=document.querySelector(".gift-box");
+let e=document.querySelector(".envelope");
+let m=document.getElementById("bgMusic");
 
-            let x = (Math.random() - 0.5) * 200 + "px";
-            let y = (Math.random() - 0.5) * 200 + "px";
+g.classList.add("opened");
 
-            f.style.left = Math.random() * window.innerWidth + "px";
-            f.style.top = Math.random() * window.innerHeight + "px";
-            f.style.setProperty('--x', x);
-            f.style.setProperty('--y', y);
-
-            document.body.appendChild(f);
-
-            setTimeout(() => f.remove(), 1000);
-        }
-    }, 800);
+for(let i=0;i<30;i++){
+let f=document.createElement("div");
+f.className="firework";
+f.style.left="50%";
+f.style.top="50%";
+f.style.setProperty('--x',(Math.random()-0.5)*300+"px");
+f.style.setProperty('--y',(Math.random()-0.5)*300+"px");
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
 }
 
-/* 💖 Floating hearts */
-setInterval(() => {
-    let heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
+setTimeout(()=>{
+g.style.display="none";
+e.classList.add("show-envelope");
 
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (15 + Math.random() * 20) + "px";
+setTimeout(()=>{
+e.classList.add("open");
+startTyping();
+startFireworks();
+},800);
 
-    document.body.appendChild(heart);
+},900);
 
-    setTimeout(() => heart.remove(), 5000);
-}, 300);
+fadeMusic(m);
+}
+
+/* fireworks loop */
+function startFireworks(){
+setInterval(()=>{
+for(let i=0;i<15;i++){
+let f=document.createElement("div");
+f.className="firework";
+f.style.left=Math.random()*window.innerWidth+"px";
+f.style.top=Math.random()*window.innerHeight+"px";
+f.style.setProperty('--x',(Math.random()-0.5)*200+"px");
+f.style.setProperty('--y',(Math.random()-0.5)*200+"px");
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
+}
+},1000);
+}
 </script>
 
 </body>
