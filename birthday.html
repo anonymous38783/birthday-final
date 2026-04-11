@@ -12,6 +12,7 @@ overflow:hidden;
 color:white;
 text-align:center;
 filter:sepia(.25) contrast(1.1) brightness(.95);
+background-attachment:fixed;
 }
 
 /* 🎞 film grain */
@@ -83,7 +84,7 @@ position:absolute;
 top:50%;left:50%;
 transform:translate(-50%,-50%) scale(.8);
 opacity:0;
-transition:1s;
+transition:1s ease;
 }
 .show-envelope{opacity:1;transform:translate(-50%,-50%) scale(1);}
 
@@ -105,6 +106,7 @@ border-radius:10px;
 padding:20px;
 transform:translateY(100%);
 transition:1s;
+overflow:hidden;
 }
 .open .flap{transform:rotateX(180deg);}
 .open .letter{transform:translateY(0);}
@@ -116,17 +118,20 @@ transition:1s;
 /* 🎞 photostrip */
 .photostrip{
 position:absolute;
-right:30px;top:50%;
-transform:translateY(-50%) rotate(3deg);
+right:30px;
+top:50%;
+transform:translateY(-50%) rotate(4deg);
 background:#111;
-padding:10px;
-border-radius:10px;
+padding:12px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 .photostrip img{
 width:120px;
 display:block;
-margin-bottom:10px;
-border:5px solid white;
+margin-bottom:12px;
+border:6px solid white;
+filter:contrast(1.1) brightness(0.95);
 }
 
 /* 🎆 fireworks */
@@ -157,14 +162,12 @@ to{transform:translate(var(--x),var(--y));opacity:0;}
 </div>
 </div>
 
-<!-- 🎞 photos -->
 <div class="photostrip">
 <img src="photo1.jpg">
 <img src="photo2.jpg">
 <img src="photo3.jpg">
 </div>
 
-<!-- 🎵 music -->
 <audio id="bgMusic" loop>
 <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -189,6 +192,8 @@ You are my everything ✨`;
 let i=0;
 function startTyping(){
 let el=document.getElementById("message");
+el.innerHTML="";
+i=0;
 function type(){
 if(i<text.length){
 el.innerHTML+=text[i++];
@@ -197,17 +202,22 @@ setTimeout(type,30);
 type();
 }
 
-/* music fade */
-function fadeMusic(a){
-a.volume=0;a.play();
+/* 🎵 cinematic music */
+function cinematicMusic(a){
+a.volume=0;
+a.currentTime=12; // PERFECT sync point
+a.play().catch(()=>{});
+
 let v=0;
-let f=setInterval(()=>{
-if(v<1){v+=0.05;a.volume=v;}
-else clearInterval(f);
-},200);
+let fade=setInterval(()=>{
+if(v<1){
+v+=0.02;
+a.volume=v;
+}else clearInterval(fade);
+},300);
 }
 
-/* open gift */
+/* 🎁 open gift */
 function openGift(){
 let g=document.querySelector(".gift-box");
 let e=document.querySelector(".envelope");
@@ -215,6 +225,16 @@ let m=document.getElementById("bgMusic");
 
 g.classList.add("opened");
 
+cinematicMusic(m);
+
+/* glow */
+document.body.style.transition="0.5s";
+document.body.style.filter="brightness(1.2) sepia(.25)";
+setTimeout(()=>{
+document.body.style.filter="sepia(.25) contrast(1.1) brightness(.95)";
+},500);
+
+/* burst */
 for(let i=0;i<30;i++){
 let f=document.createElement("div");
 f.className="firework";
@@ -237,8 +257,6 @@ startFireworks();
 },800);
 
 },900);
-
-fadeMusic(m);
 }
 
 /* fireworks loop */
