@@ -4,6 +4,9 @@
 <title>For You 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- 💌 Romantic Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 body{
 margin:0;
@@ -12,12 +15,12 @@ display:flex;
 justify-content:center;
 align-items:center;
 background:linear-gradient(135deg,#ff6f91,#ffc3a0);
-font-family:'Segoe UI',sans-serif;
+font-family:'Quicksand',sans-serif;
 overflow:hidden;
 color:white;
 }
 
-/* 💖 HEARTS BACKGROUND */
+/* 💖 FLOATING HEARTS */
 .hearts{
 position:fixed;
 width:100%;
@@ -31,12 +34,23 @@ bottom:-20px;
 font-size:18px;
 animation:floatUp linear infinite;
 opacity:.8;
-filter:blur(.3px);
 }
 @keyframes floatUp{
 0%{transform:translateY(0) scale(.8);opacity:0;}
 10%{opacity:1;}
-100%{transform:translateY(-110vh) scale(1.4);opacity:0;}
+100%{transform:translateY(-120vh) scale(1.5);opacity:0;}
+}
+
+/* 💥 HEART BURST */
+.burst{
+position:absolute;
+font-size:20px;
+animation:explode 1s ease-out forwards;
+pointer-events:none;
+}
+@keyframes explode{
+0%{transform:scale(0.5);opacity:1;}
+100%{transform:translate(var(--x),var(--y)) scale(1.5);opacity:0;}
 }
 
 /* 🎬 layout */
@@ -47,6 +61,7 @@ gap:40px;
 flex-wrap:wrap;
 justify-content:center;
 z-index:2;
+perspective:1200px;
 }
 
 /* 🎁 gift */
@@ -57,72 +72,100 @@ position:relative;
 animation:pulse 2s infinite;
 }
 @keyframes pulse{50%{transform:scale(1.08);}}
-.box{width:100%;height:100%;background:#ff4d6d;border-radius:15px;}
+
+.box{
+width:100%;
+height:100%;
+background:#ff4d6d;
+border-radius:15px;
+}
 .lid{
-width:100%;height:40px;
+width:100%;
+height:40px;
 background:#ff1f4b;
-position:absolute;top:-40px;
+position:absolute;
+top:-40px;
 border-radius:15px;
 transition:.8s;
 }
-.opened .lid{transform:translateY(-110px) rotate(-25deg);}
+.opened .lid{
+transform:translateY(-120px) rotate(-25deg);
+}
 
-/* ✉️ envelope (BIGGER) */
+/* ✉️ envelope */
 .envelope{
-width:380px;
+width:460px;
 max-width:95vw;
-height:250px;
-background:#fff;
-border-radius:12px;
+height:310px;
+background:linear-gradient(145deg,#fff,#ffe6ea);
+border-radius:14px;
 position:relative;
-box-shadow:0 15px 40px rgba(0,0,0,0.3);
+box-shadow:0 30px 70px rgba(0,0,0,0.35);
 overflow:hidden;
-transform:scale(.85);
+transform:scale(.85) rotateX(8deg);
 opacity:0;
 transition:1s;
 }
-.show-envelope{opacity:1;transform:scale(1);}
+.show-envelope{
+opacity:1;
+transform:scale(1) rotateX(0);
+}
 
+/* folds */
 .envelope::before{
 content:"";
 position:absolute;
 bottom:0;
-border-left:190px solid transparent;
-border-right:190px solid transparent;
-border-top:125px solid #ffe6ea;
+border-left:230px solid transparent;
+border-right:230px solid transparent;
+border-top:155px solid #ffe6ea;
 }
-
 .flap{
 position:absolute;
 top:0;
-border-left:190px solid transparent;
-border-right:190px solid transparent;
-border-bottom:125px solid #ff4d6d;
+border-left:230px solid transparent;
+border-right:230px solid transparent;
+border-bottom:155px solid #ff4d6d;
 transform-origin:top;
 transition:1s;
 z-index:2;
 }
 
+/* 💌 LETTER */
 .letter{
 position:absolute;
-width:90%;
-height:90%;
-top:5%;
-left:5%;
+width:92%;
+height:92%;
+top:4%;
+left:4%;
 background:#fff;
 color:#ff4d6d;
-border-radius:8px;
-padding:16px;
-transform:translateY(100%);
+border-radius:12px;
+padding:18px;
+transform:translateY(110%);
 transition:1s;
 overflow:auto;
-font-size:14px;
-line-height:1.6;
+font-size:15px;
+line-height:1.8;
+box-shadow:0 15px 40px rgba(0,0,0,0.25);
 }
-.envelope.open .flap{transform:rotateX(180deg);}
-.envelope.open .letter{transform:translateY(0);}
 
-/* 🎞 photostrip (SLANTED) */
+/* 💖 romantic text */
+.letter h2{
+font-family:'Great Vibes',cursive;
+font-size:32px;
+text-align:center;
+margin-bottom:10px;
+}
+#message{
+font-family:'Quicksand',sans-serif;
+}
+
+/* open */
+.envelope.open .flap{transform:rotateX(180deg);}
+.envelope.open .letter{transform:translateY(-5%);}
+
+/* 🎞 photostrip */
 .photostrip{
 background:#111;
 padding:10px;
@@ -143,7 +186,6 @@ border:5px solid white;
 .photostrip{transform:rotate(3deg);}
 }
 
-/* 🎵 hidden audio */
 audio{display:none;}
 </style>
 </head>
@@ -181,14 +223,14 @@ audio{display:none;}
 
 <script>
 
-/* 💖 MANY HEARTS */
-const heartContainer = document.getElementById("hearts");
-const heartIcons = ["💖","💕","💗","💋"];
+/* 💖 FLOATING HEARTS */
+const heartContainer=document.getElementById("hearts");
+const icons=["💖","💕","💗","💋"];
 
 for(let i=0;i<40;i++){
 let h=document.createElement("div");
 h.className="heart";
-h.innerHTML=heartIcons[Math.floor(Math.random()*heartIcons.length)];
+h.innerHTML=icons[Math.floor(Math.random()*icons.length)];
 h.style.left=Math.random()*100+"vw";
 h.style.fontSize=(14+Math.random()*20)+"px";
 h.style.animationDuration=(4+Math.random()*4)+"s";
@@ -196,7 +238,27 @@ h.style.animationDelay=(Math.random()*5)+"s";
 heartContainer.appendChild(h);
 }
 
-/* 💌 MESSAGE (FIXED) */
+/* 💥 HEART BURST */
+function heartBurst(){
+const icons=["💖","💕","💗","💘","💞"];
+for(let i=0;i<25;i++){
+let b=document.createElement("div");
+b.className="burst";
+b.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+b.style.left="50%";
+b.style.top="50%";
+
+let x=(Math.random()*400-200)+"px";
+let y=(Math.random()*400-200)+"px";
+b.style.setProperty('--x',x);
+b.style.setProperty('--y',y);
+
+document.body.appendChild(b);
+setTimeout(()=>b.remove(),1000);
+}
+}
+
+/* 💌 MESSAGE */
 const text=`Happy Birthday my love 💖
 
 YOU'RE 17 NOW!!! how cool is that!!
@@ -285,6 +347,7 @@ e.classList.add("show-envelope");
 
 setTimeout(()=>{
 e.classList.add("open");
+heartBurst();   // 💥 HERE IT HAPPENS
 startTyping();
 },600);
 
