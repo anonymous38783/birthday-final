@@ -4,7 +4,6 @@
 <title>For You 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- 💌 Romantic Font -->
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -20,7 +19,7 @@ overflow:hidden;
 color:white;
 }
 
-/* 💖 FLOATING HEARTS */
+/* 💖 floating hearts */
 .hearts{
 position:fixed;
 width:100%;
@@ -41,15 +40,14 @@ opacity:.8;
 100%{transform:translateY(-120vh) scale(1.5);opacity:0;}
 }
 
-/* 💥 HEART BURST */
+/* 💥 heart burst */
 .burst{
 position:absolute;
 font-size:20px;
 animation:explode 1s ease-out forwards;
-pointer-events:none;
 }
 @keyframes explode{
-0%{transform:scale(0.5);opacity:1;}
+0%{transform:scale(.5);opacity:1;}
 100%{transform:translate(var(--x),var(--y)) scale(1.5);opacity:0;}
 }
 
@@ -60,7 +58,6 @@ align-items:center;
 gap:40px;
 flex-wrap:wrap;
 justify-content:center;
-z-index:2;
 perspective:1200px;
 }
 
@@ -68,39 +65,26 @@ perspective:1200px;
 .gift-box{
 width:130px;height:130px;
 cursor:pointer;
-position:relative;
 animation:pulse 2s infinite;
 }
 @keyframes pulse{50%{transform:scale(1.08);}}
-
-.box{
-width:100%;
-height:100%;
-background:#ff4d6d;
-border-radius:15px;
-}
+.box{width:100%;height:100%;background:#ff4d6d;border-radius:15px;}
 .lid{
-width:100%;
-height:40px;
-background:#ff1f4b;
-position:absolute;
-top:-40px;
-border-radius:15px;
-transition:.8s;
+height:40px;background:#ff1f4b;
+position:absolute;top:-40px;width:130px;
+border-radius:15px;transition:.8s;
 }
-.opened .lid{
-transform:translateY(-120px) rotate(-25deg);
-}
+.opened .lid{transform:translateY(-120px) rotate(-25deg);}
 
 /* ✉️ envelope */
 .envelope{
-width:460px;
+width:520px;
+height:340px;
 max-width:95vw;
-height:310px;
 background:linear-gradient(145deg,#fff,#ffe6ea);
-border-radius:14px;
+border-radius:16px;
 position:relative;
-box-shadow:0 30px 70px rgba(0,0,0,0.35);
+box-shadow:0 30px 80px rgba(0,0,0,0.35);
 overflow:hidden;
 transform:scale(.85) rotateX(8deg);
 opacity:0;
@@ -116,22 +100,22 @@ transform:scale(1) rotateX(0);
 content:"";
 position:absolute;
 bottom:0;
-border-left:230px solid transparent;
-border-right:230px solid transparent;
-border-top:155px solid #ffe6ea;
+border-left:260px solid transparent;
+border-right:260px solid transparent;
+border-top:170px solid #ffe6ea;
 }
 .flap{
 position:absolute;
 top:0;
-border-left:230px solid transparent;
-border-right:230px solid transparent;
-border-bottom:155px solid #ff4d6d;
+border-left:260px solid transparent;
+border-right:260px solid transparent;
+border-bottom:170px solid #ff4d6d;
 transform-origin:top;
 transition:1s;
 z-index:2;
 }
 
-/* 💌 LETTER */
+/* 💌 letter */
 .letter{
 position:absolute;
 width:92%;
@@ -141,49 +125,46 @@ left:4%;
 background:#fff;
 color:#ff4d6d;
 border-radius:12px;
-padding:18px;
-transform:translateY(110%);
+padding:20px;
+transform:translateY(120%) scale(.9);
 transition:1s;
 overflow:auto;
-font-size:15px;
-line-height:1.8;
-box-shadow:0 15px 40px rgba(0,0,0,0.25);
+box-shadow:0 20px 50px rgba(0,0,0,0.25);
 }
 
 /* 💖 romantic text */
 .letter h2{
 font-family:'Great Vibes',cursive;
-font-size:32px;
+font-size:34px;
 text-align:center;
-margin-bottom:10px;
 }
-#message{
-font-family:'Quicksand',sans-serif;
+#message{line-height:1.8;}
+
+/* 🔥 NEXT LEVEL OPEN */
+.envelope.open{
+transform:scale(1.1) rotateX(0); /* grows */
+}
+.envelope.open .flap{
+transform:rotateX(180deg);
+}
+.envelope.open .letter{
+transform:translateY(-15%) scale(1.05); /* comes OUT */
 }
 
-/* open */
-.envelope.open .flap{transform:rotateX(180deg);}
-.envelope.open .letter{transform:translateY(-5%);}
-
-/* 🎞 photostrip */
+/* 🎞 photos */
 .photostrip{
-background:#111;
-padding:10px;
+background:#111;padding:10px;
 border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
 transform:rotate(8deg);
 }
 .photostrip img{
-width:95px;
-display:block;
-margin-bottom:10px;
+width:95px;margin-bottom:10px;
 border:5px solid white;
 }
 
-/* 📱 mobile */
+/* mobile */
 @media(max-width:768px){
 .main-scene{flex-direction:column;}
-.photostrip{transform:rotate(3deg);}
 }
 
 audio{display:none;}
@@ -223,42 +204,34 @@ audio{display:none;}
 
 <script>
 
-/* 💖 FLOATING HEARTS */
-const heartContainer=document.getElementById("hearts");
-const icons=["💖","💕","💗","💋"];
-
-for(let i=0;i<40;i++){
+/* hearts */
+const c=document.getElementById("hearts");
+["💖","💕","💗","💋"].forEach((_,i)=>{
+for(let j=0;j<10;j++){
 let h=document.createElement("div");
 h.className="heart";
-h.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+h.innerHTML=["💖","💕","💗","💋"][Math.floor(Math.random()*4)];
 h.style.left=Math.random()*100+"vw";
-h.style.fontSize=(14+Math.random()*20)+"px";
 h.style.animationDuration=(4+Math.random()*4)+"s";
-h.style.animationDelay=(Math.random()*5)+"s";
-heartContainer.appendChild(h);
+c.appendChild(h);
 }
+});
 
-/* 💥 HEART BURST */
-function heartBurst(){
-const icons=["💖","💕","💗","💘","💞"];
+/* burst */
+function burst(){
 for(let i=0;i<25;i++){
 let b=document.createElement("div");
 b.className="burst";
-b.innerHTML=icons[Math.floor(Math.random()*icons.length)];
-b.style.left="50%";
-b.style.top="50%";
-
-let x=(Math.random()*400-200)+"px";
-let y=(Math.random()*400-200)+"px";
-b.style.setProperty('--x',x);
-b.style.setProperty('--y',y);
-
+b.innerHTML="💖";
+b.style.left="50%"; b.style.top="50%";
+b.style.setProperty('--x',(Math.random()*400-200)+"px");
+b.style.setProperty('--y',(Math.random()*400-200)+"px");
 document.body.appendChild(b);
 setTimeout(()=>b.remove(),1000);
 }
 }
 
-/* 💌 MESSAGE */
+/* message */
 const text=`Happy Birthday my love 💖
 
 YOU'RE 17 NOW!!! how cool is that!!
@@ -305,49 +278,42 @@ let i=0;
 function startTyping(){
 let el=document.getElementById("message");
 el.textContent="";
-i=0;
 function type(){
 if(i<text.length){
-el.textContent+=text.charAt(i);
-i++;
+el.textContent+=text[i++];
 setTimeout(type,25);
 }}
 type();
 }
 
-/* 🎵 MUSIC */
+/* music */
 let started=false;
-function cinematicMusic(){
+function music(){
 if(started) return;
 started=true;
-
-const audio=document.getElementById("bgMusic");
-audio.volume=0;
-
-audio.play().then(()=>{
+let a=document.getElementById("bgMusic");
+a.volume=0;
+a.play().then(()=>{
 let v=0;
-let fade=setInterval(()=>{
-if(v<1){v+=0.02;audio.volume=v;}
-else clearInterval(fade);
+let f=setInterval(()=>{
+if(v<1){v+=.02;a.volume=v;} else clearInterval(f);
 },200);
 });
 }
 
-/* 🎁 OPEN */
+/* open */
 function openGift(){
-const g=document.querySelector(".gift-box");
-const e=document.querySelector(".envelope");
-
-g.classList.add("opened");
-cinematicMusic();
+document.querySelector(".gift-box").classList.add("opened");
+music();
 
 setTimeout(()=>{
-g.style.display="none";
+document.querySelector(".gift-box").style.display="none";
+let e=document.querySelector(".envelope");
 e.classList.add("show-envelope");
 
 setTimeout(()=>{
 e.classList.add("open");
-heartBurst();   // 💥 HERE IT HAPPENS
+burst();   /* 💥 */
 startTyping();
 },600);
 
