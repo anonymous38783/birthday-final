@@ -13,15 +13,145 @@ body {
     align-items:center;
     font-family:'Segoe UI',sans-serif;
     color:white;
+    overflow:hidden;
 }
 
+/* 🌌 Background */
+.bg-effects{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:0;
+    pointer-events:none;
+}
+
+/* 💖 floating hearts */
+.heart{
+    position:absolute;
+    animation:floatUp linear infinite;
+    opacity:0.7;
+}
+
+/* 💌 taped notes */
+.love-text{
+    position:absolute;
+    font-size:13px;
+    background:rgba(255,255,255,0.9);
+    color:#ff4d6d;
+    padding:6px 10px;
+    border-radius:6px;
+    white-space:nowrap;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    cursor:pointer;
+    pointer-events:auto;
+}
+
+.love-text:hover{ transform:scale(1.05); }
+
+.love-text::before{
+    content:"";
+    position:absolute;
+    top:-8px;
+    left:50%;
+    transform:translateX(-50%) rotate(8deg);
+    width:30px;
+    height:12px;
+    background:rgba(255,255,255,0.7);
+    border-radius:2px;
+}
+
+/* 💌 popup */
+.popup{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(0.8);
+    background:white;
+    color:#ff4d6d;
+    padding:25px;
+    border-radius:15px;
+    width:260px;
+    text-align:center;
+    z-index:5;
+    opacity:0;
+    transition:0.3s;
+}
+
+.popup.show{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+/* overlay */
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    z-index:4;
+    opacity:0;
+    pointer-events:none;
+    transition:0.3s;
+}
+
+.overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* 💔 wrong popup */
+.wrong-popup{
+    position:fixed;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%) scale(0.8);
+    background:rgba(255,255,255,0.95);
+    color:#ff4d6d;
+    padding:12px 20px;
+    border-radius:20px;
+    font-size:14px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    opacity:0;
+    z-index:6;
+    transition:0.3s;
+}
+
+.wrong-popup.show{
+    opacity:1;
+    transform:translateX(-50%) scale(1);
+}
+
+/* animations */
+@keyframes floatUp{
+    0%{transform:translateY(100vh) scale(0.5); opacity:0;}
+    20%{opacity:0.8;}
+    100%{transform:translateY(-10vh) scale(1.2); opacity:0;}
+}
+
+/* 💥 explosion */
+.explode-heart{
+    position:absolute;
+    animation:explode 1s ease forwards;
+}
+
+@keyframes explode{
+    0%{transform:translate(0,0) scale(0.5); opacity:1;}
+    100%{transform:translate(var(--x), var(--y)) scale(1.5); opacity:0;}
+}
+
+/* container */
 .container{
-    background:rgba(255,255,255,0.1);
+    position:relative;
+    z-index:1;
+    background:rgba(255,255,255,0.15);
     padding:30px;
     border-radius:20px;
     backdrop-filter:blur(12px);
     text-align:center;
-    box-shadow:0 0 30px rgba(255,255,255,0.2);
 }
 
 .display{
@@ -33,27 +163,50 @@ body {
 .keypad{
     display:grid;
     grid-template-columns:repeat(3,70px);
-    gap:10px;
+    gap:12px;
+    justify-content:center;
 }
 
 .key{
-    background:white;
+    background:rgba(255,255,255,0.95);
     color:#ff4d6d;
     padding:15px;
     border-radius:12px;
     cursor:pointer;
     font-size:18px;
-    transition:.2s;
 }
 
-.key:hover{transform:scale(1.1);background:#ffe6ea;}
+/* shake */
+@keyframes shake{
+ 0%{transform:translateX(0);}
+ 25%{transform:translateX(-6px);}
+ 50%{transform:translateX(6px);}
+ 75%{transform:translateX(-6px);}
+ 100%{transform:translateX(0);}
+}
+.shake{ animation:shake 0.4s; }
+
+/* fade */
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
 </style>
 </head>
 
 <body>
 
+<div class="bg-effects"></div>
+
+<!-- 💌 note popup -->
+<div class="overlay" onclick="closeNote()"></div>
+<div class="popup" id="popupText"></div>
+
+<!-- 💔 wrong popup -->
+<div class="wrong-popup" id="wrongPopup">Wrong password LOSERRR 💔</div>
+
 <div class="container">
-<h2>Enter my fav code 💌</h2>
+<h2>Enter my favv code 💖</h2>
 <div class="display" id="display">••••</div>
 
 <div class="keypad">
@@ -74,8 +227,9 @@ body {
 
 <script>
 let input="";
-const password="2004"; // change
+const password="2004";
 
+/* keypad */
 function press(n){
  if(input.length<4){input+=n;update();}
 }
@@ -83,15 +237,120 @@ function clearPass(){
  input=input.slice(0,-1);update();
 }
 function update(){
- document.getElementById("display").innerText="•".repeat(input.length).padEnd(4,"•");
+ document.getElementById("display").innerText=
+ "•".repeat(input.length).padEnd(4,"•");
 }
+
+/* 💥 explosion */
+function explodeHearts(){
+ for(let i=0;i<30;i++){
+   let h=document.createElement("div");
+   h.className="explode-heart";
+   h.innerHTML="💖";
+   let x=(Math.random()*400-200)+"px";
+   let y=(Math.random()*400-200)+"px";
+   h.style.setProperty("--x",x);
+   h.style.setProperty("--y",y);
+   h.style.left="50%";
+   h.style.top="50%";
+   document.body.appendChild(h);
+   setTimeout(()=>h.remove(),1000);
+ }
+}
+
 function check(){
  if(input===password){
-  window.location.href="birthday.html";
+
+  explodeHearts();
+
+  setTimeout(()=>{
+    document.body.innerHTML=`
+      <div style="
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        background:linear-gradient(135deg,#ff4d6d,#ff99ac);
+        color:white;
+        font-family:'Segoe UI',sans-serif;
+        text-align:center;
+        animation:fadeIn 0.8s ease;
+      ">
+        <h1 style="font-size:42px;margin-bottom:10px;">
+          YAYYY BABYYY 💖
+        </h1>
+
+        <p style="font-size:18px;max-width:300px;line-height:1.5;">
+          You unlocked ur bdayy present 💋
+      </div>
+    `;
+
+    setTimeout(()=>{
+      window.location.href="birthday.html";
+    },2000);
+
+  },500);
+
  }else{
-  alert("Wrong password LOSERRR 💔");
-  input="";update();
+  const box=document.querySelector(".container");
+  box.classList.add("shake");
+  setTimeout(()=>box.classList.remove("shake"),400);
+
+  const popup=document.getElementById("wrongPopup");
+  popup.classList.add("show");
+  setTimeout(()=>popup.classList.remove("show"),1500);
+
+  input="";
+  update();
  }
+}
+
+/* 💖 hearts */
+const bg=document.querySelector(".bg-effects");
+for(let i=0;i<20;i++){
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="💖";
+ h.style.left=Math.random()*100+"%";
+ h.style.animationDuration=(5+Math.random()*5)+"s";
+ h.style.fontSize=(16+Math.random()*10)+"px";
+ bg.appendChild(h);
+}
+
+/* 💌 notes */
+const notes=[
+ {text:"Open mee", msg:"You mean the world to me ", top:"10%", left:"8%"},
+ {text:"Heree", msg:"You are the love of my life", top:"20%", right:"10%"},
+ {text:"Touch me 😏", msg:"I want us forever and always 💖", bottom:"15%", left:"12%"},
+ {text:"This too", msg:"I miss you sm (nd noodle)", bottom:"20%", right:"8%"},
+ {text:"Openn", msg:"WILL YOU MARRY ME? (im joking)(or am I?🤔) ", top:"50%", left:"5%"}
+];
+
+notes.forEach(n=>{
+ let t=document.createElement("div");
+ t.className="love-text";
+ t.innerText=n.text;
+
+ if(n.top) t.style.top=n.top;
+ if(n.bottom) t.style.bottom=n.bottom;
+ if(n.left) t.style.left=n.left;
+ if(n.right) t.style.right=n.right;
+
+ t.onclick=()=>openNote(n.msg);
+ bg.appendChild(t);
+});
+
+function openNote(text){
+ document.querySelector(".overlay").classList.add("show");
+ const popup=document.getElementById("popupText");
+ popup.innerText=text;
+ popup.classList.add("show");
+}
+
+function closeNote(){
+ document.querySelector(".overlay").classList.remove("show");
+ document.getElementById("popupText").classList.remove("show");
 }
 </script>
 
