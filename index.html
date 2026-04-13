@@ -84,6 +84,13 @@ body {
     transform:translate(-50%,-50%) scale(1);
 }
 
+/* ✨ image inside popup */
+.popup img{
+    width:100%;
+    border-radius:12px;
+    margin-top:10px;
+}
+
 /* overlay */
 .overlay{
     position:fixed;
@@ -318,13 +325,13 @@ for(let i=0;i<20;i++){
  bg.appendChild(h);
 }
 
-/* 💌 notes */
+/* 💌 notes (UPDATED ONLY THIS PART) */
 const notes=[
- {text:"Open mee", msg:"You mean the world to me ", top:"10%", left:"8%"},
- {text:"Heree", msg:"You are the love of my life", top:"20%", right:"10%"},
- {text:"Touch me 😏", msg:"I want us forever and always 💖", bottom:"15%", left:"12%"},
- {text:"This too", msg:"I miss you sm (nd noodle)", bottom:"20%", right:"8%"},
- {text:"Openn", msg:"WILL YOU MARRY ME? (im joking)(or am I?🤔) ", top:"50%", left:"5%"}
+ {text:"Open mee", msg:"You mean the world to me ", img:"photo1.jpg", top:"10%", left:"8%"},
+ {text:"Heree", msg:"You are the love of my life", img:"photo2.jpg", top:"20%", right:"10%"},
+ {text:"Touch me 😏", msg:"I want us forever and always 💖", img:"photo3.jpg", bottom:"15%", left:"12%"},
+ {text:"This too", msg:"I miss you sm (nd noodle)", img:"photo4.jpg", bottom:"20%", right:"8%"},
+ {text:"Openn", msg:"WILL YOU MARRY ME? (im joking)(or am I?🤔)", img:"photo5.jpg", top:"50%", left:"5%"}
 ];
 
 notes.forEach(n=>{
@@ -337,14 +344,19 @@ notes.forEach(n=>{
  if(n.left) t.style.left=n.left;
  if(n.right) t.style.right=n.right;
 
- t.onclick=()=>openNote(n.msg);
+ t.onclick=()=>openNote(n.msg,n.img);
  bg.appendChild(t);
 });
 
-function openNote(text){
+function openNote(text,img){
  document.querySelector(".overlay").classList.add("show");
  const popup=document.getElementById("popupText");
- popup.innerText=text;
+
+ popup.innerHTML = `
+   <p>${text}</p>
+   <img src="${img}">
+ `;
+
  popup.classList.add("show");
 }
 
