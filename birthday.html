@@ -18,7 +18,7 @@ font-family:'Quicksand',sans-serif;
 overflow:hidden;
 }
 
-/* 💖 floating hearts */
+/* 💖 hearts */
 .hearts{
 position:fixed;
 width:100%;
@@ -39,7 +39,7 @@ opacity:.8;
 100%{transform:translateY(-120vh) scale(1.5);opacity:0;}
 }
 
-/* 🎬 layout */
+/* layout */
 .container{
 position:relative;
 width:100%;
@@ -49,7 +49,7 @@ justify-content:center;
 align-items:center;
 }
 
-/* 🎁 gift */
+/* gift */
 .gift-box{
 width:130px;height:130px;
 cursor:pointer;
@@ -66,7 +66,7 @@ border-radius:15px;transition:.8s;
 }
 .opened .lid{transform:translateY(-120px) rotate(-25deg);}
 
-/* ✉️ envelope */
+/* envelope */
 .envelope{
 width:520px;
 height:340px;
@@ -84,6 +84,11 @@ z-index:2;
 .show-envelope{
 opacity:1;
 transform:scale(1) rotateX(0);
+}
+
+.envelope.open{
+transform:scale(1.1);
+box-shadow: 0 0 60px rgba(255,105,180,0.6), 0 30px 80px rgba(0,0,0,0.35);
 }
 
 .envelope::before{
@@ -105,7 +110,11 @@ transition:1s;
 z-index:2;
 }
 
-/* 💌 letter */
+.envelope.open .flap{
+transform:rotateX(180deg);
+}
+
+/* letter */
 .letter{
 position:absolute;
 width:92%;
@@ -120,6 +129,10 @@ transform:translateY(120%) scale(.9);
 transition:1s;
 overflow:auto;
 box-shadow:0 20px 50px rgba(0,0,0,0.25);
+backdrop-filter: blur(6px);
+}
+.envelope.open .letter{
+transform:translateY(-15%) scale(1.05);
 }
 
 .letter h2{
@@ -138,26 +151,16 @@ color:#b03060;
 white-space:pre-line;
 }
 
-.envelope.open{
-transform:scale(1.1);
-}
-.envelope.open .flap{
-transform:rotateX(180deg);
-}
-.envelope.open .letter{
-transform:translateY(-15%) scale(1.05);
-}
-
-/* 📸 photostrip (SLIGHTLY SMALLER) */
+/* photostrip side */
 .photostrip{
 position:absolute;
-left:50%;
+left:calc(50% + 300px);
 top:50%;
-transform:translate(40px,-50%) rotate(9deg);
+transform:translateY(-50%) rotate(6deg);
 z-index:1;
 
 background:#111;
-padding:10px; /* reduced */
+padding:10px;
 border-radius:14px;
 
 box-shadow: 
@@ -169,9 +172,7 @@ transition:1s ease;
 }
 
 .envelope.open ~ .photostrip{
-transform:translate(90px,-50%) rotate(9deg);
 opacity:1;
-z-index:4;
 animation: float 4s ease-in-out infinite;
 }
 
@@ -181,51 +182,51 @@ position:absolute;
 top:-12px;
 left:50%;
 transform:translateX(-50%) rotate(-5deg);
-width:60px; /* slightly smaller */
+width:60px;
 height:18px;
 background:rgba(255,255,255,0.4);
 border-radius:5px;
 }
 
 .photostrip img{
-width:105px; /* reduced from 130px */
+width:105px;
 display:block;
-margin-bottom:10px; /* reduced spacing */
+margin-bottom:10px;
 border:5px solid white;
 border-bottom:18px solid white;
 border-radius:8px;
 box-shadow:0 8px 18px rgba(0,0,0,0.35);
-transition:.3s;
+
+opacity:0;
+transform:scale(0.8);
+animation: popIn 0.6s forwards;
 }
 
-.photostrip img:nth-child(1){ transform:rotate(-3deg); }
-.photostrip img:nth-child(2){ transform:rotate(2deg); }
-.photostrip img:nth-child(3){ transform:rotate(-2deg); }
+.photostrip img:nth-child(1){ transform:rotate(-3deg); animation-delay:0.3s; }
+.photostrip img:nth-child(2){ transform:rotate(2deg); animation-delay:0.6s; }
+.photostrip img:nth-child(3){ transform:rotate(-2deg); animation-delay:0.9s; }
 
-.photostrip img:hover{
-transform:scale(1.05) rotate(0deg);
+@keyframes popIn{
+to{opacity:1; transform:scale(1);}
 }
 
 @keyframes float{
-0%,100%{ transform: translate(90px,-50%) rotate(9deg); }
-50%{ transform: translate(90px,calc(-50% - 10px)) rotate(9deg); }
+0%,100%{ transform: translateY(-50%) rotate(6deg); }
+50%{ transform: translateY(calc(-50% - 10px)) rotate(6deg); }
 }
 
-/* 📱 mobile */
+/* mobile */
 @media (max-width:768px){
 .photostrip{
 left:50%;
-top:72%;
-transform:translate(-50%,-50%) rotate(6deg);
+top:78%;
+transform:translate(-50%,-50%) rotate(4deg);
 }
-
 .envelope.open ~ .photostrip{
-transform:translate(-50%,-50%) rotate(6deg);
+transform:translate(-50%,-50%) rotate(4deg);
 opacity:1;
 }
-.photostrip img{
-width:80px; /* slightly smaller for mobile */
-}
+.photostrip img{width:80px;}
 }
 </style>
 </head>
@@ -262,8 +263,6 @@ width:80px; /* slightly smaller for mobile */
 </audio>
 
 <script>
-
-/* hearts */
 const c=document.getElementById("hearts");
 for(let i=0;i<40;i++){
 let h=document.createElement("div");
@@ -274,7 +273,7 @@ h.style.animationDuration=(4+Math.random()*4)+"s";
 c.appendChild(h);
 }
 
-/* 💌 original message */
+/* 💌 YOUR ORIGINAL MESSAGE (UNCHANGED) */
 const text=`Happy Birthday my love 💖
 
 YOU'RE 17 NOW!!! how cool is that!!
@@ -340,7 +339,6 @@ setTimeout(type,25);
 type();
 }
 
-/* music */
 let started=false;
 function music(){
 if(started) return;
@@ -355,7 +353,6 @@ if(v<1){v+=.02;a.volume=v;} else clearInterval(f);
 });
 }
 
-/* open */
 function openGift(){
 document.querySelector(".gift-box").classList.add("opened");
 music();
