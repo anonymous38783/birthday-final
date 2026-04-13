@@ -153,7 +153,7 @@ transform:translateY(-15%) scale(1.05);
 position:absolute;
 left:50%;
 top:50%;
-transform:translate(180px,-50%) rotate(9deg); /* moved relative to center */
+transform:translate(160px,-50%) rotate(9deg); /* pulled inward so fully visible */
 z-index:5;
 
 background:#111;
@@ -168,15 +168,15 @@ animation: float 4s ease-in-out infinite;
 }
 
 @keyframes float{
-0%,100%{ transform: translate(180px,-50%) rotate(9deg); }
-50%{ transform: translate(180px,calc(-50% - 10px)) rotate(9deg); }
+0%,100%{ transform: translate(160px,-50%) rotate(9deg); }
+50%{ transform: translate(160px,calc(-50% - 10px)) rotate(9deg); }
 }
 
 /* 📱 mobile fix */
 @media (max-width:768px){
 .photostrip{
 left:50%;
-top:82%;
+top:78%;
 transform:translate(-50%,-50%) rotate(6deg);
 }
 .photostrip img{
